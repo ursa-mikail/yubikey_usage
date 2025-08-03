@@ -1,0 +1,3 @@
+yubikey-manager==5.7.2
+#yubikit>=0.5.0 # python -c "from yubikit.core.smartcard import SmartCardConnection; print('yubikit OK')"
+cryptography>=42.0.0
