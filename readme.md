@@ -1,4 +1,3 @@
-"""
 # 🔐 YubiKey Utilities Script
 
 This is a shell utility script to manage your YubiKey's PIV (Personal Identity Verification) features.
@@ -10,7 +9,8 @@ This is a shell utility script to manage your YubiKey's PIV (Personal Identity V
   pip install yubikey-manager
 ```
 
-Features:
+### Features:
+
 ```
 ✅ YubiKey detection
 
