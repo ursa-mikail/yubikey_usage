@@ -41,7 +41,7 @@ This is a shell utility script to manage your YubiKey's PIV (Personal Identity V
 | **12)** Backup certificates             | Exports certificates from all major slots to `./yubikey_backup/`.                       |
 | **q)** Quit                             | Exits the program.                                                                      |
 
-
+```
 brew install ykman  # Mac
 
 
@@ -133,6 +133,7 @@ Path to private key file (default test.key):
 Output path for cert (default selfsigned_cert.pem): 
 Generating self-signed certificate...
 Self-signed certificate created: selfsigned_cert.pem
+```
 
 | Slot name | Hex ID | Usage                            |
 | --------- | ------ | -------------------------------- |
@@ -144,6 +145,7 @@ Self-signed certificate created: selfsigned_cert.pem
 
 # ykman piv info
 
+```
 % ykman piv certificates export 9a cert_9a.pem || echo "No cert in slot 9a"
 ykman piv certificates export 9c cert_9c.pem || echo "No cert in slot 9c"
 ykman piv certificates export 9d cert_9d.pem || echo "No cert in slot 9d"
@@ -153,7 +155,7 @@ ERROR: No certificate found.
 No cert in slot 9c
 ERROR: No certificate found.
 No cert in slot 9d
-
+```
 
 
 
