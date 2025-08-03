@@ -5,7 +5,7 @@ This is a shell utility script to manage your YubiKey's PIV (Personal Identity V
 ## ✅ Prerequisites
 
 - Install [YubiKey Manager CLI (`ykman`)](https://developers.yubico.com/yubikey-manager/)
-  ```bash
+```bash
   pip install yubikey-manager
 ```
 
