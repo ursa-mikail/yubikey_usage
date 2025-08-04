@@ -157,6 +157,36 @@ ERROR: No certificate found.
 No cert in slot 9d
 ```
 
+--- 
+## yubikey_utils_miscellany_00.sh
+
+```
+Lists all YubiKeys and selects by serial number
+
+Imports or exports certs/keyshares to custom PIV object IDs
+
+Generates random PINs and binary keyshares
+
+Explains object usage: 5fc103 for domain cert/key, 5fc108 for key shares
+```
+
+| Object ID | Purpose             | Explanation                                                                                                                               |
+| --------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `5fc103`  | Domain Key or Cert  | Use this for **shared platform identity** like a domain-wide signing or trust root. This can store a certificate or public key.           |
+| `5fc108`  | Key Share or Secret | Custom slot often used for **binary key material** — e.g., secret shares, split keys, or partial symmetric keys for multi-party recovery. |
+
+
+```
+generate_keyshares_and_domaincerts.sh:
+
+1. Generates:
+- Random keyshares as keyshare_00.json, keyshare_01.json, ...
+- Self-signed domain certs as domain_cert_00.pem, domain_cert_01.pem, ...
+
+2. Randomizes a PIN per entry
+
+3. Stores each associated PIN in a pass.txt file for safe recall
+```
 
 
 
