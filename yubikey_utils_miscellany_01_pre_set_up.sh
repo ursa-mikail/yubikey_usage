@@ -1,64 +1,68 @@
 #!/bin/bash
 # chmod +x yubikey_utils_miscellany_01_pre_set_up.sh
-# ./yubikey_utils_miscellany_01_pre_set_up.sh
+# ./yubikey_utils_miscellany_01_pre_set_up.sh [NUM]
 
 set -euo pipefail
 
 # === Config ===
+NUM=${1:-3}  # Default to 3 keyshares if not specified
 OUTDIR="./yk_piv_objects"
 mkdir -p "$OUTDIR"
+PIN_FILE="$OUTDIR/pass.txt"
+> "$PIN_FILE"
 
-KEY_NAME="keyshare_00"
 DOMAIN_KEY_SIZE=32  # bytes
 KEYSHARE_SIZE=32    # bytes
-PIN_FILE="$OUTDIR/pass.txt"
 
-# === Helper ===
+# === Helpers ===
 
 gen_random_bytes() {
   local size="$1"
   head -c "$size" /dev/urandom
 }
 
-write_base64() {
-  echo -n "$2" | base64 > "$1"
+gen_random_pin() {
+  head -c 8 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 8
 }
 
-hex_sha256() {
-  echo -n "$1" | xxd -p -r | sha256sum | cut -d ' ' -f1
-}
+# === Generation Loop ===
 
-# === Generation ===
+for i in $(seq 0 $((NUM - 1))); do
+  ID=$(printf "%02d" "$i")
 
-# 1. Key name
-echo "$KEY_NAME" > "$OUTDIR/key_name.txt"
+  KEY_NAME="keyshare_${ID}"
 
-# 2. Domain key
-DOMAIN_KEY=$(gen_random_bytes "$DOMAIN_KEY_SIZE" | base64)
-echo "$DOMAIN_KEY" > "$OUTDIR/domain_key.b64"
-echo -n "$DOMAIN_KEY" | base64 -d > "$OUTDIR/domain_key.bin"
+  # Key name
+  echo "$KEY_NAME" > "$OUTDIR/key_name_${ID}.txt"
 
-# 3. Keyshare
-KEYSHARE=$(gen_random_bytes "$KEYSHARE_SIZE" | base64)
-echo "$KEYSHARE" > "$OUTDIR/keyshare.b64"
-echo -n "$KEYSHARE" | base64 -d > "$OUTDIR/keyshare.bin"
+  # Domain key (base64 + bin)
+  DOMAIN_KEY=$(gen_random_bytes "$DOMAIN_KEY_SIZE" | base64)
+  echo "$DOMAIN_KEY" > "$OUTDIR/domain_key_${ID}.b64"
+  echo -n "$DOMAIN_KEY" | base64 -d > "$OUTDIR/domain_key_${ID}.bin"
 
-# 4. Domain key hash
-sha256sum "$OUTDIR/domain_key.bin" | cut -d ' ' -f1 | xxd -r -p > "$OUTDIR/domain_key.hash"
+  # Keyshare (base64 + bin)
+  KEYSHARE=$(gen_random_bytes "$KEYSHARE_SIZE" | base64)
+  echo "$KEYSHARE" > "$OUTDIR/keyshare_${ID}.b64"
+  echo -n "$KEYSHARE" | base64 -d > "$OUTDIR/keyshare_${ID}.bin"
 
-# 5. Keyshare hash
-sha256sum "$OUTDIR/keyshare.bin" | cut -d ' ' -f1 | xxd -r -p > "$OUTDIR/keyshare.hash"
+  # Hashes (raw binary SHA256 digests)
+  sha256sum "$OUTDIR/domain_key_${ID}.bin" | cut -d ' ' -f1 | xxd -r -p > "$OUTDIR/domain_key_${ID}.hash"
+  sha256sum "$OUTDIR/keyshare_${ID}.bin"   | cut -d ' ' -f1 | xxd -r -p > "$OUTDIR/keyshare_${ID}.hash"
 
-# 6. Save a random PIN (or default)
-PIN=$(head -c 8 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c 8)
-echo "PIN: $PIN" > "$PIN_FILE"
+  # PIN for this entry
+  PIN=$(gen_random_pin)
+  echo "$KEY_NAME : $PIN" >> "$PIN_FILE"
 
-# 7. Summary
-echo "✅ Pre-setup complete. Files generated in: $OUTDIR"
+  echo "✅ Generated: $KEY_NAME"
+done
+
+# === Summary ===
+
+echo
+echo "📁 All sets stored in: $OUTDIR"
+echo "🔑 PINs for each keyshare in: $PIN_FILE"
 ls -lh "$OUTDIR"
 
-echo "📄 Contents:"
-cat "$PIN_FILE"
 
 # After running the script, yk_piv_objects/ will contain:
 # | File              | Description                        |
