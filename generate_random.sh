@@ -41,15 +41,15 @@ generate_puk
 echo ""
 
 #🔑 Generated Keys:
-#key1: wTN/<8B7deqr
-#key2: h0P+YO*#WGP)
-#key3: TfDBuM0G-5Fm
-#key4: F1nizk,Q,/#7
-#key5: u*0G&Vdv-xPg
+#key1: IiKw77H7Tnkd
+#key2: t0U2PgEOr7jV
+#key3: fgFphAWeaDDa
+#key4: 8MEuk1z3lOlW
+#key5: bjbW1JgsDxzX
 
 #🔒 lock_code (16 bytes):
-#2c8f124639d1aa42af86a060636322be
+#ec4e4608f676fec6ed59f8a5a3e9506f
 #🔐 piv_mgmt_key (32 bytes):
-#230405f710032ad1fe4ecb530aad9d92eaab435d00e037423e6646f1d3fc9a82
+#850d8221b7cd873d79a329d41db1531e14bd41199cdfe15363c9e575f2acf281
 #🔢 piv_puk (8-digit number):
-#00023508
+#18072954
